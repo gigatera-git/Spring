@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.gigatera.mapper.MemberMapper">
+	
+	<select id="selectByEmail" resultType="kr.co.gigatera.vo.MemberVO"> 
+        <![CDATA[
+          SELECT
+              email,
+              uname
+          FROM
+              tbl_member_validator
+          WHERE
+              email = #{email}       
+      ]]>
+    </select>
+    
+    <select id="selectById" resultType="kr.co.gigatera.vo.MemberVO">
+        <![CDATA[
+          SELECT
+              uid,
+              uname
+          FROM
+              tbl_member_validator
+          WHERE
+              uid = #{uid}       
+      ]]>
+    </select>
+    
+    <insert id="join">
+        <![CDATA[
+            INSERT INTO tbl_member_validator
+            (
+                email,
+                uid,
+                uname,
+                pwd,
+                regdate
+            )
+            VALUES
+            (
+                #{email},
+                #{uid},
+                #{uname},
+                #{pwd},
+                SYSDATE()
+            )
+        ]]>
+    </insert>
+    
+    
+ </mapper>
+
