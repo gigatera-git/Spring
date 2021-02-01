@@ -1,6 +1,10 @@
 # Spring
----- Validator
+  # Hibernate
+     : to enroll on hibernate instead of validator
+     
+  # Validator
      : to enroll on validator
 
----- WebSecurity
+  # WebSecurity
      : to login with websecurity
+     
