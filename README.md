@@ -8,3 +8,5 @@
   # WebSecurity
      : to login with websecurity
      
+  # LoginLogout
+     : to login and logout in common way(cookie)
