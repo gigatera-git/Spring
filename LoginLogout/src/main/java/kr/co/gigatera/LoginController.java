@@ -37,8 +37,8 @@ public class LoginController {
             loginCommand.setSavedUid(true);
         }
 		
-		String dest = req.getHeader("referer");
-		req.getSession().setAttribute("dest", null);
+	String dest = req.getHeader("referer");
+	req.getSession().setAttribute("dest", null);
         if (dest!=null) {
         	req.getSession().setAttribute("dest", dest);
         }
@@ -83,7 +83,7 @@ public class LoginController {
 	}
 
 	@RequestMapping("logout")
-    public ModelAndView logout(HttpSession session, HttpServletResponse response) {
+        public ModelAndView logout(HttpSession session, HttpServletResponse response) {
 		
 		Cookie savedUid = new Cookie("savedUid", null);
 		savedUid.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
