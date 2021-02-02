@@ -33,18 +33,18 @@ public class LoginController {
 	@RequestMapping(value="login",method=RequestMethod.GET)
 	public ModelAndView login(LoginCommand loginCommand, @CookieValue(value="savedUid",required=false) Cookie savedUid, HttpServletRequest req) throws Exception{
 		if(savedUid!=null) {
-            loginCommand.setUid(savedUid.getValue());
-            loginCommand.setSavedUid(true);
-        }
-		
-	String dest = req.getHeader("referer");
-	req.getSession().setAttribute("dest", null);
-        if (dest!=null) {
-        	req.getSession().setAttribute("dest", dest);
-        }
-        ModelAndView mav = new ModelAndView("login");
-        mav.addObject("loginCommand", loginCommand);
-        return mav;
+		    loginCommand.setUid(savedUid.getValue());
+		    loginCommand.setSavedUid(true);
+		}
+
+		String dest = req.getHeader("referer");
+		req.getSession().setAttribute("dest", null);
+		if (dest!=null) {
+			req.getSession().setAttribute("dest", dest);
+		}
+		ModelAndView mav = new ModelAndView("login");
+		mav.addObject("loginCommand", loginCommand);
+		return mav;
 	}
 	
 	@RequestMapping(value="login", method=RequestMethod.POST)
@@ -67,7 +67,7 @@ public class LoginController {
 			if (loginCommand.isSavedUid()) {
 				savedUid.setMaxAge(60*60*24); //to save for 1 day
 			} else {
-				savedUid.setMaxAge(0); //for removing
+				savedUid.setMaxAge(0); //to terminate
 			}
 			response.addCookie(savedUid);
 		
@@ -88,12 +88,12 @@ public class LoginController {
 		Cookie savedUid = new Cookie("savedUid", null);
 		savedUid.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
 		savedUid.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
-	    response.addCookie(savedUid);
+	    	response.addCookie(savedUid);
 	    
-        session.invalidate();
-        ModelAndView mav = new ModelAndView("redirect:/index");
-        return mav;
+       	 	session.invalidate();
+        	ModelAndView mav = new ModelAndView("redirect:/index");
+        	return mav;
         
-    }
+   	 }
 		
 }
