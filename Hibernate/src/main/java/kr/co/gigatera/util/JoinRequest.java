@@ -11,30 +11,30 @@ import org.hibernate.annotations.Entity;
 @Entity
 public class JoinRequest {  //kind of DTO(data transfer object)
 	
-	@Column
+    @Column
     @NotEmpty(message="이메일을 입력해주세요.")
     @Email(message="이메일 형식이 올바르지 않습니다.")
 	private String email;
 	
-	@Column
-	@Pattern(regexp="^[A-za-z]{6,12}", message="아이디를 입력하세요(영어 6~12자).")  
+    @Column
+    @Pattern(regexp="^[A-za-z]{6,12}", message="아이디를 입력하세요(영어 6~12자).")  
     private String uid;
 	
-	@Column
+    @Column
     //@NotEmpty(message="이름을 입력해주세요.")
     @Pattern(regexp="\\S{2,8}", message="이름을 입력하세요(2~8자).")
     private String uname;
 	
-	@Column
+    @Column
     //@NotEmpty(message="비밀번호를 입력해주세요.")
     //@Size(min=4, max=12, message="비밀번호를  입력하세요(4~12자).")
-	@Pattern(regexp="(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$", message="비밀번호를 입력하세요(숫자,특수문자 각1회이상/영문2개이상/총8자리이상).")  
+    @Pattern(regexp="(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$", message="비밀번호를 입력하세요(숫자,특수문자 각1회이상/영문2개이상/총8자리이상).")  
     private String pwd;
 	
-	@Column
+    @Column
     //@NotEmpty(message="비밀번호를 입력해주세요.")
     //@Size(min=4, max=12, message="비밀번호 확인을  입력하세요(4~12자).")
-	@Pattern(regexp="(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$", message="비밀번호를 입력하세요(숫자,특수문자 각1회이상/영문2개이상/총8자리이상).")  
+    @Pattern(regexp="(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$", message="비밀번호확인을 입력하세요(숫자,특수문자 각1회이상/영문2개이상/총8자리이상).")  
     private String pwd2;
     
     
