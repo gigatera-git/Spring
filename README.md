@@ -12,4 +12,4 @@
      : to login and logout in common way(cookie)
   
   # LoginLogout_IC
-     : added Interceptor on 'LoginLogout'
+     : added Interceptor to login on 'LoginLogout'
