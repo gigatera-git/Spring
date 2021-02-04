@@ -26,7 +26,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			loginCookie.setPath("/"); 
 		    response.addCookie(loginCookie);
 		    
-		    HttpSession session = request.getSession();
+		    //HttpSession session = request.getSession();
 		    //session.invalidate(); //watch out to protect session values you use
 		}
 		return true;
