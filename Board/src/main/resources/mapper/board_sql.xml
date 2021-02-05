@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.gigatera.mapper.BoardMapper">
+	
+	<select id="ref" resultType="int">
+		SELECT IFNULL(MAX(ref)+1,1) FROM tbl_board
+	</select>
+	<insert id="write">	    
+		insert into tbl_board(uname,pwd,title,contents,ref,re_step,re_lvl,reg_ip,reg_date)
+		values(#{uname},#{pwd},#{title},#{contents},#{ref},0,0,#{reg_ip},SYSDATE())
+		
+		<selectKey resultType="int" keyProperty="idx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey> 
+	</insert>
+	
+	
+	<select id="listpre" resultType="int">
+		<![CDATA[
+		Select COUNT(*)
+		from tbl_board
+		where idx<>''
+		]]>
+		<if test="SearchOpt!=null and SearchOpt!=''">
+			<if test="SearchVal!=null and SearchVal!=''">
+				and ${SearchOpt} like CONCAT('%',#{SearchVal},'%')
+			</if>
+		</if>
+	</select>
+	<select id="list" resultType="kr.co.gigatera.vo.BoardVO">
+		<![CDATA[
+		Select idx,uname,title,pwd,click,ref,re_step,re_lvl,reg_ip,reg_date
+		from tbl_board
+		where idx<>''
+		]]>
+		<if test="SearchOpt!=null and SearchOpt!=''">
+			<if test="SearchVal!=null and SearchVal!=''">
+				and ${SearchOpt} like CONCAT('%',#{SearchVal},'%')
+			</if>
+		</if>
+		<![CDATA[
+		order by ref desc, re_step, re_lvl 
+		limit #{intStartPage},#{intPageSize}
+		]]>
+	</select>
+	
+	<select id="view" resultType="kr.co.gigatera.vo.BoardVO" parameterType="int">
+		<![CDATA[
+		Select idx,uname,title,contents,pwd,click,ref,re_step,re_lvl,reg_ip,reg_date,mod_ip,mod_date
+		from tbl_board
+		where idx=#{idx}
+		]]>
+	</select>
+	<select id="viewClick" parameterType="int">
+		<![CDATA[
+		update tbl_board set click=click+1 
+		where idx=#{idx}
+		]]>
+	</select>
+	
+	
+	<update id="replyPre" parameterType="hashmap">
+		<![CDATA[
+		Update tbl_board SET re_step=re_step+1 where ref=#{ref} AND re_step > #{re_step}
+		]]>
+	</update>
+	<insert id="reply" parameterType="kr.co.gigatera.vo.BoardVO">	    
+		insert into tbl_board(uname,pwd,title,contents,ref,re_step,re_lvl,reg_ip,reg_date)
+		values(#{uname},#{pwd},#{title},#{contents},#{ref},#{re_step},#{re_lvl},#{reg_ip},SYSDATE())
+		
+		<selectKey resultType="int" keyProperty="idx" order="AFTER">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey> 
+	</insert>
+	
+	<select id="pwd" resultType="string" parameterType="int">
+		<![CDATA[
+		Select pwd
+		from tbl_board
+		where idx=#{idx}
+		]]>
+	</select>
+	
+	<delete id="del" parameterType="int">
+		<![CDATA[
+		delete from tbl_board where idx=#{idx}
+		]]>
+	</delete>
+    
+    <update id="modok" parameterType="kr.co.gigatera.vo.BoardVO">
+		<![CDATA[
+		update tbl_board set 
+		title=#{title},
+		contents=#{contents},
+		mod_ip=#{mod_ip},
+		mod_date=SYSDATE()
+		where idx=#{idx} 
+		]]>
+	</update>
+    
+ </mapper>
+
