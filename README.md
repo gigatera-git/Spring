@@ -13,3 +13,6 @@
   
   # LoginLogout_IC
      : added Interceptor to login on 'LoginLogout'
+  
+  # Board
+     : just QnA board using mybatis,BCryptPasswordEncoder,hibernate
