@@ -29,15 +29,40 @@
 
    });
   </script>
+  
+  
+  <link rel="stylesheet" type="text/css" href="/resources/config/css/reset.css">
+  <style type='text/css'>
+  
+
+  	#write {
+		text-align:right;
+  		margin:5px;
+  	}
+  	
+  	#paging {
+  		margin:5px;
+  		text-align:center;
+  	}
+  	#search {
+  		margin:5px;
+  		text-align:right;
+  	}
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
  </head>
  <body>
 
 	<form name="frmBoard" id="frmBoard" method="post">
 	
 	<div id="write">
-		[<a href="write">글등록</a>] 
+		<a href="write" class="btn btn-outline-secondary btn-sm">글등록</a>
 	</div>
-	<table border="1">
+	
+	<div id="wrap">
+	<table border="1" class="table  table-hover table-bordered">
+	<thead>
 	<tr>
 	<td align="center"><b>번호</b></td>
 	<td align="center"><b>제목</b></td>
@@ -45,9 +70,8 @@
 	<td align="center"><b>클릭수</b></td>
 	<td align="center"><b>작성일</b></td>
 	</tr>
-	
-	
-	
+	</thead>
+	<tbody>
 	<c:choose>
         <c:when test="${fn:length(list) > 0 }">
             <c:forEach items="${list}" var="boardVO" varStatus="status">
@@ -75,9 +99,13 @@
             </tr>
         </c:otherwise>
     </c:choose>
-	
-
+    </tbody>
 	</table>
+	</div>
+	
+	<div id="paging">
+		${boardPreVO.Paging() }
+	</div>
 
 	<div id="search">
 		<select name="SearchOpt" id="SearchOpt" required oninvalid="this.setCustomValidity('검색옵션을 선택하세요')" oninput="setCustomValidity('')">
@@ -94,9 +122,7 @@
 	</div>
 
 
-	<div id="paging">
-		${boardPreVO.Paging() }
-	</div>
+	
 
 
 	</form>
