@@ -59,6 +59,9 @@
 						<img src="/resources/images/common/ico_reply.gif" border="0" align="absmiddle" >
 						</c:if>
 						<a href="view?idx=${boardVO.idx }&intPage=${boardPreVO.intPage}&SearchOpt=${boardPreVO.searchOpt}&SearchVal=${boardPreVO.searchVal}">${boardVO.title }</a>
+						<c:if test="${boardVO.newbie.equals('1') }">
+			    			<img src="/resources/images/common/ico_new.gif" border="0" align="absmiddle" >
+						</c:if>
 					</td>
 					<td align="center">${boardVO.uname }</td>
 					<td align="center">${boardVO.click }</td>
