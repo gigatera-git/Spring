@@ -32,7 +32,8 @@
 	</select>
 	<select id="list" resultType="kr.co.gigatera.vo.BoardVO">
 		<![CDATA[
-		Select idx,uname,title,pwd,click,ref,re_step,re_lvl,reg_ip,reg_date
+		Select idx,uname,title,pwd,click,ref,re_step,re_lvl,reg_ip,reg_date,
+		IF(DATE_SUB(NOW(), INTERVAL 1 DAY) <= reg_date, '1', '0') AS newbie
 		from tbl_board
 		where idx<>''
 		]]>
