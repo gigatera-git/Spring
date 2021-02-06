@@ -17,6 +17,7 @@ public class BoardVO {
 	String mod_ip;
 	Date reg_date;
 	Date mod_date;
+	String newbie;
 	
 	public Integer getIdx() {
 		return idx;
@@ -103,6 +104,11 @@ public class BoardVO {
 	public void setMod_date(Date mod_date) {
 		this.mod_date = mod_date;
 	}
-	
+	public String getNewbie() {
+		return newbie;
+	}
+	public void setNewbie(String newbie) {
+		this.newbie = newbie;
+	}
 	
 }
