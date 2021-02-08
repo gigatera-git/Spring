@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+						http://www.springframework.org/schema/jdbc  http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+
+
+	<bean id="dataSourceSpied" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+	    <property name="url" value="jdbc:mysql://127.0.0.1:3306/gigatera"/>
+	    <property name="username" value="gigatera"/>
+	    <property name="password" value="password"/>
+	</bean>
+	
+	<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+	    <constructor-arg ref="dataSourceSpied" />
+	    <property name="logFormatter">
+	        <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+	            <property name="loggingType" value="MULTI_LINE" />
+	            <property name="sqlPrefix" value="[   SQL   ]  :  "/>
+	        </bean>
+	    </property>
+	</bean>
+	 
+	
+	<bean id="dataSource2" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/gigatera"></property>
+		<!-- 
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="url" value="jdbc:log4jdbc:mysql://127.0.0.1:3306/gigatera"></property>-->
+		<property name="username" value="gigatera"></property>
+		<property name="password" value="password"></property>
+		
+		<!-- DBCP 
+		<property name="maxActive" value="100"></property>
+		-->
+		<property name="initialSize" value="20"/> 
+		<property name="maxTotal" value="100"/> 
+		<property name="maxIdle" value="20"/> 
+		<property name="minIdle" value="20"/> 
+		<property name="defaultReadOnly" value="false"/> 
+		<!-- pool이 고갈되었을 경우 최대 대기 타임 ms --> 
+		<property name="maxWaitMillis" value="3000"/> 
+		<property name="validationQuery" value="SELECT 1"/> 
+		<!-- Evictor 설정 --> 
+		<property name="testOnBorrow" value="false"/> 
+		<property name="testOnReturn" value="false"/> 
+		<!-- testWhileIdle 설정. 150초마다 4개의 connection 꺼내 validation query를 날려 확인 --> 
+		<property name="testWhileIdle" value="true"/> 
+		<property name="timeBetweenEvictionRunsMillis" value="150000"/> 
+		<property name="numTestsPerEvictionRun" value="4"/> 
+		<property name="minEvictableIdleTimeMillis" value="-1"/> 
+		<!-- preparedStatement 풀링 여부 --> 
+		<property name="poolPreparedStatements" value="true"/> 
+		<property name="maxOpenPreparedStatements" value="50"/>
+
+	</bean>
+
+</beans>
