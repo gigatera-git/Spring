@@ -20,3 +20,6 @@
 
   # BoardCk
      : Adding Ckeditor4(attaching image) on Board
+     
+  # BoardFileUpload
+     : Adding file attaching on BoardCk using MultipartRequest,imgscalr,transaction
