@@ -25,4 +25,4 @@
      : Adding file attaching on BoardCk using MultipartRequest,imgscalr,transaction
      
   # SnsLogin 
-     1) using naver login on your website
+     1) using naver login on your website with scribejava
