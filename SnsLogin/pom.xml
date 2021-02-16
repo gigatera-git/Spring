@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>kr.co</groupId>
 	<artifactId>gigatera</artifactId>
-	<name>ex10</name>
+	<name>ex10SnsLogin2</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -111,6 +111,18 @@
 			<version>1.2</version>
 		</dependency>
 		
+		<!-- google login -->
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-google</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.3</version>
+		</dependency>
+		
 		<!-- naver login --> 
 		<dependency> 
 			<groupId>com.github.scribejava</groupId> 
@@ -129,7 +141,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.5.4</version>
+			<version>2.3.3</version>
 		</dependency>
 		
 		<!-- json lib -->
