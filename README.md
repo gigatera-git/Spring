@@ -26,3 +26,4 @@
      
   # SnsLogin 
      1) using naver login on your website with scribejava
+     2) added google login with RestTemplate
