@@ -16,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -23,6 +24,7 @@ import com.github.scribejava.core.model.OAuth2AccessToken;
 import kr.co.gigatera.snslogin.GoogleLoginUtil;
 import kr.co.gigatera.snslogin.GoogleOAuthRequest;
 import kr.co.gigatera.snslogin.GoogleOAuthResponse;
+import kr.co.gigatera.snslogin.KakaoLoginUtil;
 import kr.co.gigatera.snslogin.NaverLoginUtil;
 
 @Controller
@@ -72,40 +74,39 @@ public class SnsLoginController {
 	@RequestMapping(value="/google/callback",method=RequestMethod.GET)
 	public ModelAndView googleCallback(@RequestParam String code) throws Exception {
 		
-		GoogleOAuthRequest googleOAuthRequest = new GoogleOAuthRequest(
-				googleLoginUtil.getRedirectUri(),
-				googleLoginUtil.getClientId(),
-				googleLoginUtil.getClientSecret(),
-				code,
-				"authorization_code"
-			);
-		
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> resultEntity = restTemplate.postForEntity(
-				googleLoginUtil.getTokenUri(), googleOAuthRequest, String.class);
-		
-		ObjectMapper mapper = new ObjectMapper(); //object to json
-		mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES); //snake_case
-		mapper.setSerializationInclusion(Include.NON_NULL);
-
-		GoogleOAuthResponse result = mapper.readValue(resultEntity.getBody(), new TypeReference<GoogleOAuthResponse>() {
-		});
-		
-		String jwtToken = result.getIdToken();
-		String requestUrl = UriComponentsBuilder
-				.fromHttpUrl(googleLoginUtil.getTokenInfoUri())
-				.queryParam("id_token", jwtToken)
-				.build()
-				.encode()
-				.toUriString();
-		
-		String resultJson = restTemplate.getForObject(requestUrl, String.class);
-		Map<String,String> userInfo = mapper.readValue(resultJson, new TypeReference<Map<String, String>>(){});
-		
-		//userInfo를 활용하여 로그인 및 db저장 처리
+		Map<String,String> userInfo = googleLoginUtil.getGoogleUserInfo(code);
 		
 		ModelAndView mav = new ModelAndView("/google/callback");
 		mav.addObject("body",userInfo);
+		return mav;
+	}
+	
+	// for kakao
+	@Inject
+	KakaoLoginUtil kakaoLoginUtil;
+	
+	@RequestMapping(value="/kakao/login",method=RequestMethod.GET)
+	public ModelAndView kakaoLogin(HttpSession session) throws Exception {
+		
+		String url = kakaoLoginUtil.getAuthorizationUrl();
+
+	  	ModelAndView mav = new ModelAndView("/kakao/login");
+		mav.addObject("url", url);
+		return mav;
+	}
+	
+	@RequestMapping(value="/kakao/callback",method=RequestMethod.GET)
+	public ModelAndView kakaoCallback(@RequestParam String code) throws Exception {
+		JsonNode userInfo = kakaoLoginUtil.getKakaoUserInfo(code);
+		
+		//String id = userInfo.get("id").toString();
+		//String email = userInfo.get("kaccount_email").toString();
+		//String image = userInfo.get("properties").get("profile_image").toString();
+		//String nickname = userInfo.get("properties").get("nickname").toString();
+		//userInfo 정보로 로그인 및 db저장 처리
+
+		ModelAndView mav = new ModelAndView("/kakao/callback");
+		mav.addObject("body", userInfo);
 		return mav;
 	}
 }

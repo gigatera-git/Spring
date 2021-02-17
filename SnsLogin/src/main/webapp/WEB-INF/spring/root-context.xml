@@ -8,5 +8,7 @@
 	<bean class="kr.co.gigatera.snslogin.NaverLoginUtil" />
 	
 	<bean class="kr.co.gigatera.snslogin.GoogleLoginUtil" />
+	
+	<bean class="kr.co.gigatera.snslogin.KakaoLoginUtil" />
 		
 </beans>
