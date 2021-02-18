@@ -10,5 +10,20 @@
 	<bean class="kr.co.gigatera.snslogin.GoogleLoginUtil" />
 	
 	<bean class="kr.co.gigatera.snslogin.KakaoLoginUtil" />
+	
+	
+	
+	<bean id="connectionFactory"
+        class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
+        <constructor-arg value="your client id" />
+        <constructor-arg value="you secure code" />
+    </bean>
+    <bean id="oAuth2Parameters"
+        class="org.springframework.social.oauth2.OAuth2Parameters">
+        <property name="scope" value="email" />
+        <property name="redirectUri" value="https://localhost/facebook/callback" />
+    </bean>
+    
+    <bean class="kr.co.gigatera.snslogin.FacebookLoginUtil" />
 		
 </beans>

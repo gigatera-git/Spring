@@ -5,25 +5,20 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
+import kr.co.gigatera.snslogin.FacebookLoginUtil;
 import kr.co.gigatera.snslogin.GoogleLoginUtil;
-import kr.co.gigatera.snslogin.GoogleOAuthRequest;
-import kr.co.gigatera.snslogin.GoogleOAuthResponse;
 import kr.co.gigatera.snslogin.KakaoLoginUtil;
 import kr.co.gigatera.snslogin.NaverLoginUtil;
 
@@ -106,6 +101,33 @@ public class SnsLoginController {
 		//userInfo 정보로 로그인 및 db저장 처리
 
 		ModelAndView mav = new ModelAndView("/kakao/callback");
+		mav.addObject("body", userInfo);
+		return mav;
+	}
+	
+	// for facebook
+	@Autowired
+    private FacebookConnectionFactory connectionFactory;
+    @Autowired
+    private OAuth2Parameters oAuth2Parameters;
+    
+    @Inject
+	FacebookLoginUtil facebookLoginUtil;
+	
+	@RequestMapping(value="/facebook/login",method=RequestMethod.GET)
+	public ModelAndView facebookLogin(HttpSession session) throws Exception {
+		String facebook_url = facebookLoginUtil.getAuthorizationUrl(connectionFactory,oAuth2Parameters);
+
+	  	ModelAndView mav = new ModelAndView("/facebook/login");
+		mav.addObject("url", facebook_url);
+		return mav;
+	}
+	
+	@RequestMapping(value="/facebook/callback",method=RequestMethod.GET)
+	public ModelAndView facebookCallback(@RequestParam String code) throws Exception {
+		Map<String,String> userInfo = facebookLoginUtil.getGoogleUserInfo(connectionFactory,oAuth2Parameters,code);
+		
+		ModelAndView mav = new ModelAndView("/facebook/callback");
 		mav.addObject("body", userInfo);
 		return mav;
 	}
