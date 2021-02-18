@@ -28,3 +28,5 @@
      1) naver login on your website with scribejava
      2) google login with RestTemplate
      3) kakao login with RestApi
+     4) facebook login with spring-social-facebook
+        * callback url have to be "https", refer to my post
