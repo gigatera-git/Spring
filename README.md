@@ -29,4 +29,4 @@
      2) google login with RestTemplate
      3) kakao login with RestApi
      4) facebook login with spring-social-facebook
-        * callback url have to be "https", refer to my post
+        ▷ callback url in facebook have to be "https", refer to my post
