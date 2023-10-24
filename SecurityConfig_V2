@@ -1,0 +1,88 @@
+package com.example.demo.security;
+
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+import com.example.demo.service.SecurityService;
+
+@Configuration
+@EnableMethodSecurity
+@EnableWebSecurity
+public class SecurityConfig {
+	
+	private final SecurityService securityService;
+
+    public SecurityConfig(SecurityService securityService) {
+		super();
+		this.securityService = securityService;
+	}
+
+	@Bean
+    protected PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+    
+    @Bean
+    //protected SecurityFilterChain filterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    	
+    	http
+    	
+//    		.csrf((csrf)->csrf.disable())  // csrf 중지 
+    		.csrf(AbstractHttpConfigurer::disable)
+    		
+    		.sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+    	
+//    		.authorizeHttpRequests(
+//    			authorize->authorize.requestMatchers(new MvcRequestMatcher(introspector, "write")).permitAll() // 아무나 접속 가능 
+//    								.requestMatchers(new MvcRequestMatcher(introspector, "login")).permitAll() // 아무나 접속 가능 
+//    								.anyRequest().authenticated()  // 인가는 인되도 인증은 되게..
+//    		)
+    		
+    		.authorizeHttpRequests(request -> request
+                    .requestMatchers(
+                            "/write", "/login", "/error", "/join", "/ok"
+                    )
+                    .permitAll()
+            )
+    		
+    		//.authorizeHttpRequests(request -> request.anyRequest().authenticated())
+    		
+    		.formLogin(
+    			(formLogin)->formLogin.loginPage("/login") // 로그인 페이지 
+    								  .usernameParameter("uid")
+    								  .passwordParameter("password")
+    								  .defaultSuccessUrl("/ok") // 로그인 후 이동 페이지 
+    								  .failureUrl("/error")
+    		)
+    		
+    		.logout(
+    			(logout)->logout.logoutSuccessUrl("/login") // 로그아웃 후 이동 페이지 
+    							.invalidateHttpSession(true) //세션 전체 삭제 
+    		)
+    		
+    	;
+    	
+    	return http.build();
+    }
+    
+    @Bean
+    protected AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+}
